@@ -15,6 +15,11 @@ export default createConfigForNuxt({
     ],
   },
 })
-  .append(
-    // your custom flat config here...
-  )
+  .append({
+    rules: {
+      'regexp/no-misleading-capturing-group': 'warn',
+      'regexp/no-super-linear-backtracking': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'vue/multi-word-component-names': 'off',
+    },
+  })
