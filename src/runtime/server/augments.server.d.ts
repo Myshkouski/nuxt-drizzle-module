@@ -2,7 +2,7 @@ import type { Datasources } from './utils/drizzle'
 
 declare module 'nitropack/types' {
   interface NitroRuntimeHooks {
-    'drizzle:created': (datasources: Datasources) => HookResult
+    'drizzle:created': (datasources: Datasources) => void
   }
 }
 

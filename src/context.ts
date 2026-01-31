@@ -72,7 +72,7 @@ export type TransformDrizzleConfigOptions = {
   resolver: Resolver
 }
 
-export async function transformDrizzleConfig(
+async function transformDrizzleConfig(
   drizzleConfig: DrizzleConfig,
   { name, path, resolver, cwd }: TransformDrizzleConfigOptions,
 ): Promise<DatasourceInfo> {

@@ -5,7 +5,7 @@ import type { PrimitiveProps } from './types'
 
 export default defineDrizzleDb(<
   TSchema extends Record<string, any>,
->(config: PrimitiveProps<PostgresOptions<object>>, schema: TSchema) => {
+>(config: PrimitiveProps<PostgresOptions<{}>>, schema: TSchema) => {
   const client = createPostgres(config)
   return drizzle(client, { schema })
 })

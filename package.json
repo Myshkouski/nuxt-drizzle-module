@@ -33,13 +33,11 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.0",
     "@nuxt/kit": "^4.3.0",
     "consola": "^3.4.2",
     "db0": "^0.3.4",
     "jiti": "^2.6.1",
-    "mysql2": "^3.16.2",
-    "postgres": "^3.4.8",
+    "nitropack": "^2.13.1",
     "strip-indent": "^4.1.1"
   },
   "devDependencies": {
@@ -51,6 +49,8 @@
     "@nuxt/test-utils": "^3.23.0",
     "@types/node": "^24.10.9",
     "changelogen": "^0.6.2",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-orm": "^0.45.1",
     "eslint": "^9.39.2",
     "nuxt": "^4.3.0",
     "typescript": "^5.9.3",
@@ -58,14 +58,18 @@
     "vue-tsc": "^3.2.4"
   },
   "peerDependencies": {
-    "drizzle-kit": "^0.31.8",
-    "drizzle-orm": "^0.45.1"
+    "@libsql/client": "^0.17.0",
+    "mysql2": "^3.16.2",
+    "postgres": "^3.4.8"
   },
   "peerDependenciesMeta": {
-    "drizzle-kit": {
+    "@libsql/client": {
       "optional": true
     },
-    "drizzle-orm": {
+    "mysql2": {
+      "optional": true
+    },
+    "postgres": {
       "optional": true
     }
   }
