@@ -22,7 +22,7 @@
     "playground"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
+    "build": "nuxt-module-build prepare && nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxt dev playground",
     "dev:build": "nuxt build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
@@ -43,17 +43,18 @@
     "strip-indent": "^4.1.1"
   },
   "devDependencies": {
+    "@nuxt-drizzle/utils": "^0.0.3",
     "@nuxt/devtools": "^3.1.1",
     "@nuxt/eslint-config": "^1.13.0",
     "@nuxt/module-builder": "^1.0.2",
     "@nuxt/schema": "^4.3.0",
     "@nuxt/test-utils": "^3.23.0",
-    "@types/node": "latest",
+    "@types/node": "^24.10.9",
     "changelogen": "^0.6.2",
     "eslint": "^9.39.2",
     "nuxt": "^4.3.0",
-    "typescript": "~5.9.3",
-    "vitest": "^4.0.18",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.2.4"
   },
   "peerDependencies": {
