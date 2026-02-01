@@ -1,4 +1,4 @@
-import { resolvePath, defineNuxtModule, createResolver, addServerImports, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerImports, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates } from '@nuxt/kit'
 import type { HookResult } from 'nuxt/schema'
 import { createModuleContext, type DatasourceInfo } from './context'
 import { runParallel } from './utils/async'
@@ -15,6 +15,10 @@ declare module '@nuxt/schema' {
 
 export interface ModuleOptions {
   /**
+   * Directory to search datasources
+   */
+  baseDir: string
+  /**
    * Patterns to search Drizzle configs
    */
   configPattern: string | string[]
@@ -24,24 +28,27 @@ export interface ModuleOptions {
   datasource?: DatasourceOptions
 }
 
+const resolver = createResolver(import.meta.url)
+const logger = useLogger(MODULE_NAME)
+
 export default defineNuxtModule<ModuleOptions>().with({
   meta: {
     name: MODULE_NAME,
     configKey: 'drizzle',
   },
 
-  defaults: {
-    configPattern: [
-      '*/drizzle.config.*',
-      '*/drizzle-*.config.*',
-    ],
-    datasource: {},
+  async defaults(nuxt) {
+    return {
+      baseDir: resolver.resolve(nuxt.options.serverDir, "drizzle"),
+      configPattern: [
+        '*/drizzle.config.*',
+        '*/drizzle-*.config.*',
+      ],
+      datasource: {},
+    }
   },
 
   async setup(moduleOptions, nuxt) {
-    const logger = useLogger(MODULE_NAME)
-    const resolver = createResolver(import.meta.url)
-
     const runtimeServerUtilsFilename = resolver.resolve('./runtime/server/utils/drizzle')
     addServerImports({
       name: 'useDrizzle',
@@ -59,7 +66,7 @@ export default defineNuxtModule<ModuleOptions>().with({
     const runtimeServerPluginFilename = resolver.resolve('./runtime/server/plugins/drizzle')
     addServerPlugin(runtimeServerPluginFilename)
 
-    const baseDir = await resolvePath('~~/server/drizzle', { type: 'dir' })
+    const baseDir = await resolver.resolvePath(moduleOptions.baseDir, { type: 'dir' })
 
     const context = createModuleContext({
       cwd: process.cwd(),
