@@ -36,7 +36,7 @@ export async function typeDeclarations(context: ModuleContext) {
 
     declare module '${VirtualModules.DATASOURCE}' {
       export type { DrizzleDatasourceName, NamedDrizzleDatasourceFactory };
-      export const datasources: DrizzleDatasourceFactories
+      export const datasourceFactories: DrizzleDatasourceFactories
     }
   `)
 }
@@ -45,14 +45,14 @@ export async function runtime(context: ModuleContext) {
   const datasources = await context.resolve()
 
   return stripIndent(/* js */ `
-    const datasources = {};
+    const datasourceFactories = {};
     ${
       datasources.map(({ name, imports: { schema, connector } }, dbModuleIndex) => {
         return stripIndent(/* js */`
           import dbModule${dbModuleIndex} from '${connector}';
           ${schema.map((id, schemaModuleIdIndex) => `import * as schemaModule${dbModuleIndex}_${schemaModuleIdIndex} from '${schema}';`)}
 
-          datasources['${name}'] = {
+          datasourceFactories['${name}'] = {
             createDb: dbModule${dbModuleIndex},
             schema:
               Object.assign(
@@ -62,6 +62,6 @@ export async function runtime(context: ModuleContext) {
         `)
       }).join('\n')
     }
-    export { datasources };
+    export { datasourceFactories };
   `)
 }

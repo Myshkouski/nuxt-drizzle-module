@@ -1,21 +1,21 @@
 import { type H3Event, createError } from 'h3'
-import { datasources } from '#nuxt-drizzle/virtual/datasources'
+import { datasourceFactories, type DrizzleDatasourceName } from '#nuxt-drizzle/virtual/datasources'
 import { useStorage } from '#imports'
 import type { Storage } from 'unstorage'
 
-export function useDrizzle<TName extends keyof typeof datasources>(event: H3Event, name: TName) {
+export function useDrizzle<TName extends keyof typeof datasourceFactories>(event: H3Event, name: TName) {
   return event.context.drizzle[name]
 }
 
-export type Datasources = Awaited<ReturnType<typeof createDatasources>>
+export type DrizzleDatasources = Awaited<ReturnType<typeof createDatasources>>
 
 export async function createDatasources<
-  TConfig extends Record<keyof typeof datasources, any>,
+  TConfig extends Record<keyof typeof datasourceFactories, any>,
 >(config: TConfig) {
   const result: {
-    [TName in keyof typeof datasources]: Awaited<ReturnType<typeof createDrizzleDatasource<TName, TConfig>>>
+    -readonly [TName in keyof typeof datasourceFactories]: Awaited<ReturnType<typeof createDrizzleDatasource<TName, TConfig>>>
   } = {}
-  for (const name in datasources) {
+  for (const name in datasourceFactories) {
     let datasource
     try {
       datasource = await createDrizzleDatasource(name, config[name])
@@ -43,11 +43,11 @@ export interface DrizzleDatasource<TDatabase, TSchema> {
 }
 
 async function createDrizzleDatasource<
-  TName extends keyof typeof datasources,
+  TName extends keyof typeof datasourceFactories,
   TConfig,
 >(name: TName, config: TConfig) {
-  const { createDb, schema } = datasources[name] as {
-    [K in keyof typeof datasources[typeof name]]: typeof datasources[typeof name][K]
+  const { createDb, schema } = datasourceFactories[name] as {
+    [K in keyof typeof datasourceFactories[typeof name]]: typeof datasourceFactories[typeof name][K]
   }
   const db = await createDb(config, schema)
   return { db, schema } as DrizzleDatasource<typeof db, typeof schema>
@@ -62,7 +62,7 @@ export function defineDrizzleDb<
 }
 
 export async function useDrizzleMigrations<
-  TName extends keyof typeof datasources,
+  TName extends keyof typeof datasourceFactories,
 >(name: TName) {
   const storage = useStorage<string>('assets:drizzle:migrations')
   const assets = await storage.getKeys(name)
