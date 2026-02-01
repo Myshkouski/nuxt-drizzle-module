@@ -12,7 +12,6 @@ Find and replace all on all files (CMD+SHIFT+F):
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
 
 Nuxt module for automating Drizzle ORM setup with conditional database driver imports to prevent unused dependencies in the final bundle.
 
@@ -152,14 +151,11 @@ npx drizzle-kit push
 
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/nuxt-drizzle/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/nuxt-drizzle
+[npm-version-src]: https://img.shields.io/npm/v/@nuxt-drizzle/module/latest.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-version-href]: https://npmjs.com/package/@nuxt-drizzle/module
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-drizzle.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/nuxt-drizzle
+[npm-downloads-src]: https://img.shields.io/npm/dm/@nuxt-drizzle/module.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-downloads-href]: https://npm.chart.dev/@nuxt-drizzle/module
 
-[license-src]: https://img.shields.io/npm/l/nuxt-drizzle.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/nuxt-drizzle
-
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+[license-src]: https://img.shields.io/npm/l/@nuxt-drizzle/module.svg?style=flat&colorA=020420&colorB=00DC82
+[license-href]: https://npmjs.com/package/@nuxt-drizzle/module
