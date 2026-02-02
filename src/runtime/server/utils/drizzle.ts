@@ -4,7 +4,7 @@ import {
   type DrizzleDatasourceName, 
   type NamedDrizzleDatasourceFactory
 } from '#nuxt-drizzle/virtual/datasources'
-import { useStorage } from '#imports'
+import { useStorage } from 'nitropack/runtime'
 import type { Storage } from 'unstorage'
 
 export function useDrizzle<TName extends DrizzleDatasourceName>(event: H3Event, name: TName): NamedDrizzleDatasource<TName> {
