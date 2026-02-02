@@ -3,12 +3,25 @@ import { consola } from 'consola'
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hookOnce('drizzle:migrated', async (datasources) => {
     consola.info('Seed started...')
-    await datasources.bar.db.insert(datasources.bar.schema.baz).values([
-      { id: '1', data: 'hello, I\'m baz from bar!' },
+
+    // Seed authors
+    await datasources.users.db.insert(datasources.users.schema.authors).values([
+      { id: '1', name: 'John Doe', email: 'john@example.com' },
+      { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
     ])
-    await datasources.foo.db.insert(datasources.foo.schema.qux).values([
-      { id: '1', data: 'hello, I\'m qux from foo!' },
+
+    // Seed posts
+    await datasources.content.db.insert(datasources.content.schema.posts).values([
+      { id: '1', title: 'First Post', content: 'Content of first post', authorId: '1', createdAt: new Date() },
+      { id: '2', title: 'Second Post', content: 'Content of second post', authorId: '2', createdAt: new Date() },
     ])
+
+    // Seed comments
+    await datasources.content.db.insert(datasources.content.schema.comments).values([
+      { id: '1', postId: '1', authorId: '2', content: 'Great first post!', createdAt: new Date() },
+      { id: '2', postId: '1', authorId: '1', content: 'Thanks for the comment!', createdAt: new Date() },
+    ])
+
     consola.info('Seed completed!')
   })
 })

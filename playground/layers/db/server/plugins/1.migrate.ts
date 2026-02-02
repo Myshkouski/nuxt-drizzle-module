@@ -1,6 +1,9 @@
 import { consola } from 'consola'
+import { colorize } from 'consola/utils'
 
 import type { DrizzleDatasources } from '#nuxt-drizzle/virtual/datasources'
+
+const STATEMENT_BREAKPOINT = '--> statement-breakpoint' as const
 
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hookOnce('drizzle:created', async (datasources) => {
@@ -11,14 +14,16 @@ export default defineNitroPlugin((nitro) => {
         continue
       }
 
-      consola.info(`Running migrations for ${JSON.stringify(name)} datasource...`)
+      consola.info(`Running migrations:`, colorize("greenBright", name))
 
       for await (const { id, query } of migrations) {
+        const statements = query.split(STATEMENT_BREAKPOINT)
         try {
-          await datasource.db.run(query)
-        }
-        catch (cause) {
-          consola.warn(`Migrations for ${JSON.stringify(name)} rolled back.`)
+          for (const statement of statements) {
+            await datasource.db.run(statement)
+          }
+        } catch (cause) {
+          consola.warn(`Migrations rolled back:`, colorize("greenBright", name))
 
           throw createError({
             fatal: true,
@@ -32,7 +37,7 @@ export default defineNitroPlugin((nitro) => {
         }
       }
 
-      consola.success(`Migrations for ${JSON.stringify(name)} completed`)
+      consola.success(`Migrations completed` )
     }
 
     nitro.hooks.callHook('drizzle:migrated', datasources)

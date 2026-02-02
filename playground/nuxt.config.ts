@@ -11,10 +11,10 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     drizzle: {
-      bar: {
+      content: {
         url: 'file::memory:',
       },
-      foo: {
+      users: {
         url: 'file::memory:',
       },
     },
@@ -25,10 +25,10 @@ export default defineNuxtConfig({
       database: true,
     },
     database: {
-      bar: {
+      content: {
         connector: 'sqlite',
       },
-      foo: {
+      users: {
         connector: 'sqlite',
       },
     },
