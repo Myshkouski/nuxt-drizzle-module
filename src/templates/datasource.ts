@@ -6,39 +6,55 @@ export async function typeDeclarations(context: ModuleContext) {
   const datasources = await context.resolve()
 
   return stripIndent(/* ts */`
-    type DrizzleDatasourceName = ${JSON.stringify(datasources.map(datasourceModule => datasourceModule.name))}[number];
+    type DrizzleDatasourceName = ${
+      datasources.length > 0  
+    ? JSON.stringify(datasources.map(datasourceModule => datasourceModule.name)) + '[number]'
+        : 'string'
+    };
+
+    interface DrizzleDatasourceFactory<
+      TCreate extends (config: any, schema: TSchema) => any,
+      TSchema extends {}
+    > {
+      readonly createDb: TCreate
+      readonly schema: TSchema
+    }
 
     type NamedDrizzleDatasourceFactory<TName extends DrizzleDatasourceName> =
-      ${datasources.map(({ name, imports }) => {
-        return /* ts */ `TName extends '${name}'
-          ? {
-              readonly createDb: typeof import('${imports.connector}').default;
-              readonly schema: {} ${imports.schema.map((id) => {
-                  return /* ts */`& typeof import('${id}')`
-                })
-              };
-            }\n:`
-      }).join('')}
-      never;
-
-    type DrizzleDatasourceFactories = [DrizzleDatasourceName] extends [never]
-      ? Record<string, {
-        createDb: <TSchema extends Record<string, unknown>>(
-          config: any,
-          schema: TSchema
-        ) => Promise<any> | any,
-        schema: {}
-        $config: any
-      }>
-      : {
-        readonly [TName in DrizzleDatasourceName]: NamedDrizzleDatasourceFactory<TName>
+      ${
+        datasources.map(({ name, imports }) => {
+          return stripIndent(/*ts*/`
+            TName extends '${name}'
+              ? DrizzleDatasourceFactory<
+                  typeof import('${imports.connector}').default<${schemaType(imports.schema)}>, 
+                  ${schemaType(imports.schema)}
+                >
+              :`
+          )
+        }).join('')
       }
+      DrizzleDatasourceFactory<
+        (
+          config: any,
+          schema: {}
+        ) => any,
+        {}
+      >;
+
+    type DrizzleDatasourceFactories = {
+      readonly [TName in DrizzleDatasourceName]: NamedDrizzleDatasourceFactory<TName>
+    }
 
     declare module '${VirtualModules.DATASOURCE}' {
-      export type { DrizzleDatasourceName, NamedDrizzleDatasourceFactory };
-      export const datasourceFactories: DrizzleDatasourceFactories
+      export type { DrizzleDatasourceName, NamedDrizzleDatasourceFactory, DrizzleDatasourceFactories, NamedDrizzleDatasourceFactory };
+      export const datasourceFactories: DrizzleDatasourceFactories;
     }
   `)
+}
+
+function schemaType(imports: string[]) {
+  const importedTypes = imports.map((id) => `& typeof import('${id}')`).join(' ')
+  return /*ts*/`{} ${importedTypes}`
 }
 
 export async function runtime(context: ModuleContext) {
