@@ -4,7 +4,7 @@
   "description": "Nuxt module for automating Drizzle ORM setup with conditional database driver imports to prevent unused dependencies in the final bundle.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/myshkouski/nuxt-drizzle.git"
+    "url": "https://github.com/myshkouski/nuxt-drizzle.git"
   },
   "license": "MIT",
   "type": "module",
