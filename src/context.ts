@@ -8,15 +8,36 @@ import { colorize } from 'consola/utils'
 import type { ConnectorName } from 'db0'
 
 export interface ModuleContext {
-  resolve(forceUpdate?: boolean): Promise<DatasourceInfo[]>
+  resolve(forceUpdate?: boolean): Promise<DatasourceInfo[]> | DatasourceInfo[]
+}
+
+export interface LoggerOptions {
+  logger?: ConsolaInstance
+}
+
+export interface StubModuleContextOptions extends LoggerOptions {}
+
+class StubModuleContext implements ModuleContext {
+  readonly #options: StubModuleContextOptions
+  constructor(options: StubModuleContextOptions) {
+    this.#options = options
+  }
+  resolve() {
+    this.#options.logger?.info('Resolving datasources within stub module context')
+    return []
+  }
+}
+
+export function createStubModuleContext(options?: StubModuleContextOptions) {
+  return new StubModuleContext(options || {})
 }
 
 class ModuleContextImpl implements ModuleContext {
   #datasources: DatasourceInfo[] | null = null
-  readonly #options: CreateModuleContextOptions
+  readonly #options: ModuleContextOptions
   readonly #jiti: Jiti
 
-  constructor(options: CreateModuleContextOptions) {
+  constructor(options: ModuleContextOptions) {
     this.#options = options
     this.#jiti = createJiti(options.resolver.resolve())
   }
@@ -100,16 +121,15 @@ async function transformDrizzleConfig(
   }
 }
 
-export type CreateModuleContextOptions = {
+export interface ModuleContextOptions extends LoggerOptions {
   cwd: string
   baseDir: string
   configPattern: string | string[]
   resolver: Resolver
-  logger?: ConsolaInstance
   datasource?: Record<string, { connector?: ConnectorName } | undefined>
 }
 
-export function createModuleContext(options: CreateModuleContextOptions): ModuleContext {
+export function createModuleContext(options: ModuleContextOptions): ModuleContext {
   return new ModuleContextImpl(options)
 }
 

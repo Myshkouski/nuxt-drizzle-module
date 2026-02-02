@@ -1,5 +1,4 @@
-import { defineNitroPlugin } from 'nitropack/runtime'
-import { useRuntimeConfig } from '#imports'
+import { defineNitroPlugin, useRuntimeConfig } from 'nitropack/runtime'
 import { createDatasources } from '../utils/drizzle'
 
 export default defineNitroPlugin(async (nitroApp) => {

@@ -1,6 +1,6 @@
 import { defineNuxtModule, createResolver, addServerImports, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates } from '@nuxt/kit'
 import type { HookResult } from 'nuxt/schema'
-import { createModuleContext, type DatasourceInfo } from './context'
+import { createModuleContext, createStubModuleContext, type DatasourceInfo, type ModuleContext } from './context'
 import { runParallel } from './utils/async'
 import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
@@ -68,14 +68,18 @@ export default defineNuxtModule<ModuleOptions>().with({
 
     const baseDir = await resolver.resolvePath(moduleOptions.baseDir, { type: 'dir' })
 
-    const context = createModuleContext({
-      cwd: process.cwd(),
-      baseDir,
-      logger,
-      resolver,
-      configPattern: moduleOptions.configPattern,
-      datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource),
-    })
+    const context: ModuleContext = nuxt.options.rootDir == await resolver.resolvePath('..', { type: 'dir' })
+      ? createStubModuleContext({
+          logger
+        })
+      : createModuleContext({
+          cwd: process.cwd(),
+          baseDir,
+          logger,
+          resolver,
+          configPattern: moduleOptions.configPattern,
+          datasource: getDatasourceOptions(nuxt, moduleOptions.datasource),
+        })
 
     addServerTemplate({
       filename: VirtualModules.DATASOURCE,
