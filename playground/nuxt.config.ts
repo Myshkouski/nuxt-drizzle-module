@@ -20,17 +20,14 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: 'latest',
-  nitro: {
-    experimental: {
-      database: true,
-    },
-    database: {
+  drizzle: {
+    datasource: {
       content: {
         connector: 'sqlite',
       },
       users: {
         connector: 'sqlite',
       },
-    },
+    }
   },
 })
