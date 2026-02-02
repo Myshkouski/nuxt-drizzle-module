@@ -74,7 +74,7 @@ export default defineNuxtModule<ModuleOptions>().with({
       logger,
       resolver,
       configPattern: moduleOptions.configPattern,
-      datasource: getDatasourceOptions(nuxt, moduleOptions.datasource),
+      datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource),
     })
 
     addServerTemplate({
@@ -112,7 +112,7 @@ export default defineNuxtModule<ModuleOptions>().with({
         logger.info('Datasources updated.')
 
         await runParallel(
-          () => updateServerAssets(context, nuxt),
+          () => updateServerAssets(context, nuxt.options),
           () => updateTemplates({
             filter(template) {
               return template.filename.startsWith(VIRTUAL_MODULE_ID_PREFIX)
@@ -123,7 +123,7 @@ export default defineNuxtModule<ModuleOptions>().with({
     })
 
     nuxt.hook('modules:done', async () => {
-      await updateServerAssets(context, nuxt)
+      await updateServerAssets(context, nuxt.options)
     })
   },
 })

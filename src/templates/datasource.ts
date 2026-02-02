@@ -66,7 +66,11 @@ export async function runtime(context: ModuleContext) {
       datasources.map(({ name, imports: { schema, connector } }, dbModuleIndex) => {
         return stripIndent(/* js */`
           import dbModule${dbModuleIndex} from '${connector}';
-          ${schema.map((id, schemaModuleIdIndex) => `import * as schemaModule${dbModuleIndex}_${schemaModuleIdIndex} from '${schema}';`)}
+          ${
+            schema.map((id, schemaModuleIdIndex) => {
+              return `import * as schemaModule${dbModuleIndex}_${schemaModuleIdIndex} from '${id}';`
+            }).join('\n')
+          }
 
           datasourceFactories['${name}'] = {
             createDb: dbModule${dbModuleIndex},
