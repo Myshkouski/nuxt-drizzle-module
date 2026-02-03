@@ -12,10 +12,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     drizzle: {
       content: {
-        url: 'file::memory:',
+        url: 'file::memory:?cache=shared',
       },
       users: {
-        url: 'file::memory:',
+        url: 'file::memory:?cache=shared',
       },
     },
   },
