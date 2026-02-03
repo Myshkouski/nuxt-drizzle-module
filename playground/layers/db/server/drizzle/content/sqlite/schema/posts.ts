@@ -6,5 +6,5 @@ export const posts = sqliteTable('posts', {
   description: text('description').notNull(),
   image: text('image').notNull(),
   date: integer('date', { mode: 'timestamp' }).notNull(),
-  authors: text('authors').$type<string[]>(),
+  authors: text('authors', { mode: 'json' }).$type<string[]>(),
 })
