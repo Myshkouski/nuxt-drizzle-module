@@ -1,5 +1,13 @@
 {
   "private": true,
-  "name": "@nuxt-drizzle/fixtures-blog",
-  "type": "module"
+  "name": "@nuxt-drizzle/test-e2e-blog",
+  "type": "module",
+  "scripts": {
+    "prepare": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^4.4.0",
+    "better-sqlite3": "^12.6.2",
+    "nuxt": "^4.2.2"
+  }
 }
