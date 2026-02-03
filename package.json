@@ -49,6 +49,7 @@
     "@nuxt/module-builder": "^1.0.2",
     "@nuxt/schema": "^4.3.0",
     "@nuxt/test-utils": "^3.23.0",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.10.9",
     "changelogen": "^0.6.2",
     "drizzle-kit": "^0.31.8",
@@ -61,12 +62,12 @@
     "vue-tsc": "^3.2.4"
   },
   "peerDependencies": {
-    "@libsql/client": "^0.17.0",
+    "better-sqlite3": "^12.6.2",
     "mysql2": "^3.16.2",
     "postgres": "^3.4.8"
   },
   "peerDependenciesMeta": {
-    "@libsql/client": {
+    "better-sqlite3": {
       "optional": true
     },
     "mysql2": {
@@ -75,5 +76,10 @@
     "postgres": {
       "optional": true
     }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }
