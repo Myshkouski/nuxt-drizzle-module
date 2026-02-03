@@ -1,5 +1,6 @@
-import type { NamedDrizzleDatasource, DrizzleDatasourceName, Migration } from '#nuxt-drizzle/virtual/datasources'
+import { createError } from 'h3'
 import type { MigrationConfig, MigrationMeta } from 'drizzle-orm/migrator'
+import type { Migration, NamedDrizzleDatasource } from './drizzle'
 
 interface DbDialect<TSession = any> {
   migrate(
@@ -14,9 +15,9 @@ interface Db<TSession = any> {
   session: TSession
 }
 
-export async function migrate<
+export async function migrateDrizzle<
   TDatasource extends NamedDrizzleDatasource<DrizzleDatasourceName>
->(datasource: TDatasource, migrations: AsyncIterable<Migration, void, unknown>) {
+>(datasource: TDatasource, migrations: Iterable<Migration> | AsyncIterable<Migration>) {
   for await (const { filename, idx, ...migrationsMeta } of migrations) {
     try {
       const db = datasource.db as any as Db

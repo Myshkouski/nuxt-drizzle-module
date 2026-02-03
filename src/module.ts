@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver, addServerImports, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerImports, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates, addServerImportsDir } from '@nuxt/kit'
 import type { HookResult } from 'nuxt/schema'
 import { createModuleContext, createStubModuleContext, type DatasourceInfo, type ModuleContext } from './context'
 import { runParallel } from './utils/async'
@@ -49,19 +49,8 @@ export default defineNuxtModule<ModuleOptions>().with({
   },
 
   async setup(moduleOptions, nuxt) {
-    const runtimeServerUtilsFilename = resolver.resolve('./runtime/server/utils/drizzle')
-    addServerImports({
-      name: 'useDrizzle',
-      from: runtimeServerUtilsFilename,
-    })
-    addServerImports({
-      name: 'defineDrizzleDb',
-      from: runtimeServerUtilsFilename,
-    })
-    addServerImports({
-      name: 'useDrizzleMigrations',
-      from: runtimeServerUtilsFilename,
-    })
+    const runtimeServerUtilsDir = resolver.resolve('./runtime/server/utils')
+    addServerImportsDir(runtimeServerUtilsDir)
 
     const runtimeServerPluginFilename = resolver.resolve('./runtime/server/plugins/drizzle')
     addServerPlugin(runtimeServerPluginFilename)
