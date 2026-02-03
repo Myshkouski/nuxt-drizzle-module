@@ -111,15 +111,22 @@ async function* generate(journal: MigrationJournal, storage: Storage<string>) {
       })
     }
 
-    yield {
+    const migration: Migration = {
       filename,
       idx,
       sql: query.split(STATEMENT_BREAKPOINT),
       hash: digest(query),
       folderMillis: when,
       bps: breakpoints,
-    } satisfies MigrationMeta & { idx: number, filename: string }
+    }
+
+    yield migration
   }
+}
+
+export interface Migration extends MigrationMeta {
+  idx: number;
+  filename: string;
 }
 
 interface MigrationJournal {
