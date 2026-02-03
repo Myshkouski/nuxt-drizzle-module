@@ -7,7 +7,4 @@ export default defineConfig({
     './schema/comments.ts',
   ],
   out: './migrations',
-  dbCredentials: {
-    url: 'file::memory:',
-  },
 }, __dirname)
