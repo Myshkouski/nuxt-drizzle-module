@@ -6,8 +6,8 @@ import type { DrizzleDatasources, DrizzleDatasourceName } from '#nuxt-drizzle/vi
 interface DbDialect<TSession = any> {
   migrate(
     migrations: Iterable<MigrationMeta>,
-    session?: TSession,
-    config?: Partial<MigrationConfig> | string
+    session: TSession,
+    config: Partial<MigrationConfig> | string
   ): any
 }
 
