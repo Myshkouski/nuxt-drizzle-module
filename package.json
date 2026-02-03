@@ -39,6 +39,7 @@
     "db0": "^0.3.4",
     "jiti": "^2.6.1",
     "nitropack": "^2.13.1",
+    "ohash": "^2.0.11",
     "strip-indent": "^4.1.1"
   },
   "devDependencies": {

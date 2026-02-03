@@ -22,8 +22,9 @@ export async function updateServerAssets(context: ModuleContext, nuxtOptions: Nu
       dir,
       /**
        * @todo Doesn't work in dev mode - 'fs' driver does not support 'pattern'
+       * Disabled - include all files to use with meta/_journal.json
        */
-      pattern: '*.sql',
+      // pattern: '*.sql',
     } satisfies ServerAssetDir
   })
 

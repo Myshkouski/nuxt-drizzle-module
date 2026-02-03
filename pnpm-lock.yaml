@@ -29,6 +29,9 @@ importers:
       nitropack:
         specifier: ^2.13.1
         version: 2.13.1(@libsql/client@0.17.0)(drizzle-orm@0.45.1(@libsql/client@0.17.0)(mysql2@3.16.2)(postgres@3.4.8))(mysql2@3.16.2)
+      ohash:
+        specifier: ^2.0.11
+        version: 2.0.11
       postgres:
         specifier: ^3.4.8
         version: 3.4.8

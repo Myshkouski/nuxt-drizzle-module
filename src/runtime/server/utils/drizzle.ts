@@ -6,6 +6,8 @@ import {
 } from '#nuxt-drizzle/virtual/datasources'
 import { useStorage } from 'nitropack/runtime'
 import type { Storage } from 'unstorage'
+import type { MigrationMeta } from 'drizzle-orm/migrator'
+import { digest } from 'ohash'
 
 export function useDrizzle<TName extends DrizzleDatasourceName>(event: H3Event, name: TName): NamedDrizzleDatasource<TName> {
   return event.context.drizzle[name]
@@ -77,33 +79,55 @@ export function defineDrizzleDb<
 export async function useDrizzleMigrations<
   TName extends DrizzleDatasourceName,
 >(name: TName) {
-  const storage = useStorage<string>('assets:drizzle:migrations')
-  const assets = await storage.getKeys(name)
-  // todo: use ./meta/_journal.json instead of sorting by filename
-  const queryFilenames = assets.filter((filename) => {
-    // In dev mode, Nitro uses fs driver that does not filter assets by glob pattern.
-    return filename.endsWith('.sql')
-  }).toSorted()
+  const storage = useStorage<string>(`assets:drizzle:migrations:${ name }`)
+  const journal = await storage.getItem<MigrationJournal>(`meta/_journal.json`)
+  if (!journal) {
+    throw createError({
+      fatal: true,
+      message: `Cannot find migration journal for '${ name }'`,
+      data: {
+        datasource: name,
+      },
+    })
+  }
 
-  if (!assets.length) return
-
-  return generate(queryFilenames, storage)
+  return generate(journal, storage)
 }
 
-async function* generate(filenames: string[], storage: Storage<string>) {
-  for (const id of filenames) {
-    const query = await storage.getItem<string>(id)
+const STATEMENT_BREAKPOINT = '--> statement-breakpoint' as const
+
+async function* generate(journal: MigrationJournal, storage: Storage<string>) {
+  for (const { idx, when, tag, breakpoints } of journal.entries) {
+    const filename = tag + '.sql'
+    const query = await storage.getItem<string>(filename)
 
     if (!query) {
       throw createError({
         fatal: true,
-        message: `Cannot find migration query '${id}'`,
+        message: `Cannot find migration filename: ${filename}`,
         data: {
-          id,
+          filename,
         },
       })
     }
 
-    yield { id, query }
+    yield {
+      filename,
+      idx,
+      sql: query.split(STATEMENT_BREAKPOINT),
+      hash: digest(query),
+      folderMillis: when,
+      bps: breakpoints,
+    } satisfies MigrationMeta & { idx: number, filename: string }
   }
+}
+
+interface MigrationJournal {
+  entries: Iterable<{
+    idx: number;
+    version: string;
+    when: number;
+    tag: string
+    breakpoints: true;
+  }>
 }

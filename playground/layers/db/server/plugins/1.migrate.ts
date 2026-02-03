@@ -1,44 +1,47 @@
 import { consola } from 'consola'
 import { colorize } from 'consola/utils'
+import type { MigrationConfig, MigrationMeta } from 'drizzle-orm/migrator'
+import type { DrizzleDatasources, DrizzleDatasourceName } from '#nuxt-drizzle/virtual/datasources'
 
-import type { DrizzleDatasources } from '#nuxt-drizzle/virtual/datasources'
+interface DbDialect<TSession = any> {
+  migrate(
+    migrations: Iterable<MigrationMeta>,
+    session?: TSession,
+    config?: Partial<MigrationConfig> | string
+  ): any
+}
 
-const STATEMENT_BREAKPOINT = '--> statement-breakpoint' as const
+interface Db<TSession = any> {
+  dialect: DbDialect<TSession>
+  session: TSession
+}
 
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hookOnce('drizzle:created', async (datasources) => {
     for (const [name, datasource] of Object.entries(datasources)) {
-      const migrations = await useDrizzleMigrations(name as keyof DrizzleDatasources)
-      if (!migrations) {
-        consola.info(`Found no migrations for ${JSON.stringify(name)} datasource`)
-        continue
-      }
+      const migrations = await useDrizzleMigrations(name as DrizzleDatasourceName)
 
       consola.info(`Running migrations:`, colorize('greenBright', name))
 
-      for await (const { id, query } of migrations) {
-        const statements = query.split(STATEMENT_BREAKPOINT)
+      for await (const { filename, idx, ...migrationsMeta } of migrations) {
         try {
-          for (const statement of statements) {
-            await datasource.db.run(statement)
-          }
+          const db = datasource.db as any as Db
+          await db.dialect.migrate([migrationsMeta], db.session, {})
         }
         catch (cause) {
-          consola.warn(`Migrations rolled back:`, colorize('greenBright', name))
-
           throw createError({
             fatal: true,
-            message: `Migrations for ${JSON.stringify(name)} rolled back`,
+            message: `Migrations failed: ${ name }`,
             cause,
             data: {
-              id,
-              statement: query,
+              filename,
+              idx,
             },
           })
         }
       }
 
-      consola.success(`Migrations completed`)
+      consola.success(`Migrations completed`, colorize('greenBright', name))
     }
 
     nitro.hooks.callHook('drizzle:migrated', datasources)
