@@ -1,3 +1,6 @@
+import { consola } from 'consola'
+import { colorize } from 'consola/utils'
+
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hookOnce('drizzle:migrated', async (datasources) => {
     // Seed authors
@@ -5,6 +8,8 @@ export default defineNitroPlugin((nitro) => {
       { id: '1', name: 'John Doe', email: 'john@example.com' },
       { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
     ])
+
+    consola.info('Seeding completed:', colorize("greenBright", 'users'))
 
     // Seed posts
     await datasources.content.db.insert(datasources.content.schema.posts).values([
@@ -17,5 +22,7 @@ export default defineNitroPlugin((nitro) => {
       { id: '1', postId: '1', authorId: '2', content: 'Great first post!', createdAt: new Date() },
       { id: '2', postId: '1', authorId: '1', content: 'Thanks for the comment!', createdAt: new Date() },
     ])
+
+    consola.info('Seeding completed:', colorize("greenBright", 'content'))
   })
 })
