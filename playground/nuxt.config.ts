@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     drizzle: {
       content: {
         url: 'file::memory:?cache=shared',
+        // url: 'postgresql://postgres:postgres@localhost:5432/postgres'
       },
       users: {
         url: 'file::memory:?cache=shared',
@@ -24,6 +25,7 @@ export default defineNuxtConfig({
     datasource: {
       content: {
         connector: 'sqlite',
+        // connector: 'postgresql',
       },
       users: {
         connector: 'sqlite',
