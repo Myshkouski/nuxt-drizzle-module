@@ -7,7 +7,7 @@ export default defineNitroPlugin((nitro) => {
       await migrateDrizzle(datasource, migrations)
     }
 
-    nitro.hooks.callHook('drizzle:migrated', datasources)
+    await nitro.hooks.callHook('drizzle:migrated', datasources)
   })
 })
 
