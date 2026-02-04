@@ -69,7 +69,7 @@ class ModuleContextImpl implements ModuleContext {
       const configuredDrizzleDatasources = availableDrizzleDatasources.filter((datasource) => {
         const datasourceConfig = configuredDrizzleDatasourceNames[datasource.name]
         if (datasourceConfig) {
-          return datasourceConfig.connector == datasource.dialect
+          return datasourceConfig.connector == datasource.driver || datasourceConfig.connector == datasource.dialect
         }
       })
 
@@ -99,12 +99,14 @@ async function transformDrizzleConfig(
   drizzleConfig: DrizzleConfig,
   { name, path, resolver, cwd }: TransformDrizzleConfigOptions,
 ): Promise<DatasourceInfo> {
+  const driver = 'driver' in drizzleConfig
+    ? drizzleConfig.driver
+    : undefined
+  const dialect = drizzleConfig.dialect
   return {
     name,
-    dialect: drizzleConfig.dialect,
-    driver: 'driver' in drizzleConfig
-      ? drizzleConfig.driver
-      : undefined,
+    dialect,
+    driver,
     imports: {
       config: path,
       schema: await mapAsync(drizzleConfig.schema ? [drizzleConfig.schema].flat() : [], async (schemaFilename) => {
@@ -118,7 +120,7 @@ async function transformDrizzleConfig(
         : undefined,
       connector:
         await findPath('./connector', { cwd })
-        || resolver.resolve('./runtime/server/drizzle/connectors', drizzleConfig.dialect),
+        || resolver.resolve('./runtime/server/drizzle/connectors', driver || dialect),
     },
   }
 }
