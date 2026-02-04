@@ -11,7 +11,7 @@ export default defineNitroPlugin((nitro) => {
       consola.success(`Migrations completed`, colorize('greenBright', name))
     }
 
-    nitro.hooks.callHook('drizzle:migrated', datasources)
+    await nitro.hooks.callHook('drizzle:migrated', datasources)
   })
 })
 
