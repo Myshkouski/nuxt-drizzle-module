@@ -1,6 +1,6 @@
 import { defineNuxtModule, createResolver, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates, addServerImportsDir } from '@nuxt/kit'
 import type { HookResult } from 'nuxt/schema'
-import { createModuleContext, createStubModuleContext, type DatasourceInfo, type ModuleContext } from './context'
+import { createModuleContext, createStubModuleContext, type DatasourceInfo, type ModuleContext } from '@nuxt-drizzle/utils/context'
 import { runParallel } from './utils/async'
 import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
@@ -67,7 +67,7 @@ export default defineNuxtModule<ModuleOptions>().with({
           logger,
           resolver,
           configPattern: moduleOptions.configPattern,
-          datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource),
+          datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource) || {},
         })
 
     addServerTemplate({
