@@ -6,7 +6,7 @@ import {
 } from '#nuxt-drizzle/virtual/datasources'
 import { useStorage } from 'nitropack/runtime'
 import type { Storage } from 'unstorage'
-import type { MigrationMeta } from 'drizzle-orm/migrator'
+import type { Migration } from '@nuxt-drizzle/utils'
 import { digest } from 'ohash'
 
 export function useDrizzle<TName extends DrizzleDatasourceName>(event: H3Event, name: TName): NamedDrizzleDatasource<TName> {
@@ -122,11 +122,6 @@ async function* generate(journal: MigrationJournal, storage: Storage<string>) {
 
     yield migration
   }
-}
-
-export interface Migration extends MigrationMeta {
-  idx: number
-  filename: string
 }
 
 interface MigrationJournal {
