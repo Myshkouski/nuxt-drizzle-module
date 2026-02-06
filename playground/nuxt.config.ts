@@ -1,11 +1,9 @@
-import path from "path";
-
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/devtools',
-  ],
   extends: [
     '../test/fixtures/nuxt-app',
+  ],
+  modules: [
+    '@nuxt/devtools',
   ],
   devtools: {
     enabled: false,

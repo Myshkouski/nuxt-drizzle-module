@@ -1,7 +1,6 @@
 export default defineNuxtConfig({
-  compatibilityDate: 'latest',
   extends: [
-    '../fixtures/nuxt-app'
+    '../fixtures/nuxt-app',
   ],
   runtimeConfig: {
     drizzle: {
@@ -13,6 +12,7 @@ export default defineNuxtConfig({
       },
     },
   },
+  compatibilityDate: 'latest',
   drizzle: {
     datasource: {
       content: {
@@ -22,5 +22,5 @@ export default defineNuxtConfig({
         connector: 'pglite',
       },
     },
-  }
+  },
 })
