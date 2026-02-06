@@ -1,4 +1,4 @@
-import type { ModuleContext } from '../context'
+import type { ModuleContext } from '@nuxt-drizzle/utils/context'
 import type { ServerAssetDir } from 'nitropack/types'
 import type { ConnectorName } from 'db0'
 import type { NuxtOptions } from '@nuxt/schema'

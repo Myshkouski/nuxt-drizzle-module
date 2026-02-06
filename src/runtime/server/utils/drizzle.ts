@@ -6,7 +6,7 @@ import {
 } from '#nuxt-drizzle/virtual/datasources'
 import { useStorage } from 'nitropack/runtime'
 import type { Storage } from 'unstorage'
-import type { Migration } from '@nuxt-drizzle/utils'
+import type { Migration } from '@nuxt-drizzle/utils/migration'
 import { digest } from 'ohash'
 
 export function useDrizzle<TName extends DrizzleDatasourceName>(event: H3Event, name: TName): NamedDrizzleDatasource<TName> {
