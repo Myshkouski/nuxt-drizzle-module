@@ -1,13 +1,17 @@
+import path from "path";
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/devtools',
-    '@nuxt/ui',
+  ],
+  extends: [
+    '../test/fixtures/nuxt-app',
   ],
   devtools: {
-    enabled: true,
-    timeline: {
-      enabled: true,
-    },
+    enabled: false,
+  //   timeline: {
+  //     enabled: true,
+  //   },
   },
   runtimeConfig: {
     drizzle: {
