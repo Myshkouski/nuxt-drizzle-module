@@ -85,7 +85,7 @@ export default defineNuxtConfig({
 
 ```ts
 // server/drizzle/users/drizzle.config.ts
-import { defineConfig } from '@nuxt-drizzle/utils'
+import { defineConfig } from '@nuxt-drizzle/utils/config'
 
 export default defineConfig({
   dialect: 'sqlite', // or 'postgresql', 'mysql'
