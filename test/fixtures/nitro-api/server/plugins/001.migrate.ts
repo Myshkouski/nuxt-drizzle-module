@@ -1,6 +1,6 @@
 import { consola } from 'consola'
 import { colorize } from 'consola/utils'
-import type { DrizzleDatasourceName } from '#nuxt-drizzle/virtual/datasources'
+import type { DrizzleDatasourceName, DrizzleDatasources } from '#nuxt-drizzle/virtual/datasources'
 
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hookOnce('drizzle:created', async (datasources) => {

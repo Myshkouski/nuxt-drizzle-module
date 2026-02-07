@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       tsConfig: {
         include: [
           // Fix types when referencing module using import statement
-          '../../../src/runtime/server/**/*.d.ts',
+          path.resolve(import.meta.dirname, '../../../src/runtime/server'),
         ],
       },
     },
