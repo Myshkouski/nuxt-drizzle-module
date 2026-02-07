@@ -1,5 +1,5 @@
 import stripIndent from 'strip-indent'
-import type { ModuleContext } from '../context'
+import type { ModuleContext } from '@nuxt-drizzle/utils/context'
 import { VirtualModules } from '../utils/const'
 
 export async function typeDeclarations(context: ModuleContext) {
@@ -26,7 +26,7 @@ export async function typeDeclarations(context: ModuleContext) {
           return stripIndent(/* ts */`
             TName extends '${name}'
               ? DrizzleDatasourceFactory<
-                  typeof import('${imports.connector}').default<${schemaType(imports.schema)}>, 
+                  typeof import('${imports.connector}').default<${schemaType(imports.schema)}>,
                   ${schemaType(imports.schema)}
                 >
               :`,
