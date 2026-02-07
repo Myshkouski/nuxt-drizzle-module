@@ -1,4 +1,4 @@
-import type { DrizzleDatasources, NamedDrizzleDatasource, Migration } from './utils/drizzle'
+import type { DrizzleDatasources, NamedDrizzleDatasource } from './utils/types'
 
 declare module 'nitropack/types' {
   interface NitroRuntimeHooks {
@@ -7,7 +7,7 @@ declare module 'nitropack/types' {
 }
 
 declare module '#nuxt-drizzle/virtual/datasources' {
-  export type { DrizzleDatasources, NamedDrizzleDatasource, Migration }
+  export type { DrizzleDatasources, NamedDrizzleDatasource }
 }
 
 declare module 'h3' {
