@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/mysql2'
 import { createConnection } from 'mysql2/promise'
-import { defineDrizzle } from '../utils/db/defineDrizzle'
+import { defineDrizzle } from '../../utils/db/defineDrizzle'
 
 export default defineDrizzle(async <
   TSchema extends Record<string, any>,

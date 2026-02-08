@@ -5,6 +5,7 @@ import { runParallel } from './utils/async'
 import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
 import * as datasourceTemplates from './templates/datasource'
+import * as helpersTemplates from './templates/helpers'
 import * as runtimeConfigTemplates from './templates/runtime-config'
 
 declare module '@nuxt/schema' {
@@ -74,7 +75,8 @@ export default defineNuxtModule<ModuleOptions>().with({
       : createModuleContext({
           cwd: process.cwd(),
           baseDir,
-          connectorsDir: resolver.resolve('./runtime/server/connectors'),
+          connectorsDir: resolver.resolve('./runtime/server/lib/connectors'),
+          helpersDir: resolver.resolve('./runtime/server/lib/helpers'),
           logger,
           resolver,
           configPattern: moduleOptions.configPattern,
@@ -89,9 +91,28 @@ export default defineNuxtModule<ModuleOptions>().with({
     })
 
     addTypeTemplate({
-      filename: VirtualModules.MODULE_TYPES_DTS,
+      filename: VirtualModules.DATASOURCE_TYPES,
       async getContents() {
         return await datasourceTemplates.typeDeclarations(context)
+      },
+    }, {
+      node: true,
+      nitro: true,
+      nuxt: false,
+      shared: false,
+    })
+
+    addServerTemplate({
+      filename: VirtualModules.HELPERS,
+      async getContents() {
+        return await helpersTemplates.runtime(context)
+      },
+    })
+
+    addTypeTemplate({
+      filename: VirtualModules.HELPERS_TYPES,
+      async getContents() {
+        return await helpersTemplates.typeDeclarations(context)
       },
     }, {
       node: true,

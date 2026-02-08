@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import createPostgres, { type Options as PostgresOptions } from 'postgres'
-import { defineDrizzle } from '../utils/db/defineDrizzle'
+import { defineDrizzle } from '../../utils/db/defineDrizzle'
 import type { PrimitiveProps } from './types'
 
 export default defineDrizzle(<

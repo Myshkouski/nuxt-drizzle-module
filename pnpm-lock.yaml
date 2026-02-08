@@ -16,8 +16,8 @@ importers:
   .:
     dependencies:
       '@nuxt-drizzle/utils':
-        specifier: ^0.0.13
-        version: 0.0.13(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0(encoding@0.1.13))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(magicast@0.5.2)(mysql2@3.16.3)(postgres@3.4.8)(sqlite3@5.1.7)(typescript@5.9.3)(vue-tsc@3.2.4(typescript@5.9.3))
+        specifier: ^0.0.14
+        version: 0.0.14(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0(encoding@0.1.13))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(magicast@0.5.2)(mysql2@3.16.3)(postgres@3.4.8)(sqlite3@5.1.7)(typescript@5.9.3)(vue-tsc@3.2.4(typescript@5.9.3))
       '@nuxt/kit':
         specifier: ^4.3.0
         version: 4.3.0(magicast@0.5.2)
@@ -1074,8 +1074,8 @@ packages:
     engines: {node: '>=10'}
     deprecated: This functionality has been moved to @npmcli/fs
 
-  '@nuxt-drizzle/utils@0.0.13':
-    resolution: {integrity: sha512-BJ/BTaN054Qi+j6d7O49XSLO02KUPRq2cKSdJLIc2X/v1XF5ngUPYsGln+pBtvfrS8ScylWXVs3leaCMFLZxlw==}
+  '@nuxt-drizzle/utils@0.0.14':
+    resolution: {integrity: sha512-YMop5Khe6zUIK9Sk2dAoOjdHHzvRKVYh7+MPbsFsv124Z1kN07Ymf01EmIo79KzXMkfunFBpkB8sDNFZxahAOg==}
     hasBin: true
 
   '@nuxt/cli@3.32.0':
@@ -7462,7 +7462,7 @@ snapshots:
       rimraf: 3.0.2
     optional: true
 
-  '@nuxt-drizzle/utils@0.0.13(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0(encoding@0.1.13))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(magicast@0.5.2)(mysql2@3.16.3)(postgres@3.4.8)(sqlite3@5.1.7)(typescript@5.9.3)(vue-tsc@3.2.4(typescript@5.9.3))':
+  '@nuxt-drizzle/utils@0.0.14(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0(encoding@0.1.13))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.6.2)(magicast@0.5.2)(mysql2@3.16.3)(postgres@3.4.8)(sqlite3@5.1.7)(typescript@5.9.3)(vue-tsc@3.2.4(typescript@5.9.3))':
     dependencies:
       '@nuxt/kit': 4.3.0(magicast@0.5.2)
       '@nuxt/schema': 4.3.0
