@@ -19,16 +19,16 @@ export type InferColumns<TTable extends Table>
     ? TTableConfig['columns']
     : never
 
-type AnyInsert =
-  MySqlInsertBase<any, any, any, any, any, any> |
-  PgInsertBase<any, any, any, any, any, any> |
-  SQLiteInsertBase<any, any, any, any, any, any>
+type AnyInsert
+  = MySqlInsertBase<any, any, any, any, any, any>
+    | PgInsertBase<any, any, any, any, any, any>
+    | SQLiteInsertBase<any, any, any, any, any, any>
 
 export type InferTable<T extends AnyInsert>
   = T extends MySqlInsertBase<any, any, any, any, any, any> ? InferMysqlTable<T>
-  : T extends PgInsertBase<any, any, any, any, any, any> ? InferPgTable<T>
-  : T extends SQLiteInsertBase<any, any, any, any, any, any> ? InferSqliteTable<T>
-  : never
+    : T extends PgInsertBase<any, any, any, any, any, any> ? InferPgTable<T>
+      : T extends SQLiteInsertBase<any, any, any, any, any, any> ? InferSqliteTable<T>
+        : never
 
 type RemoveNeverProps<T extends Record<string, any>> = {
   [K in keyof T as T[K] extends never ? never : K]: T[K]

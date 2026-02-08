@@ -29,12 +29,12 @@ export async function typeDeclarations(context: ModuleContext) {
 export async function runtime(context: ModuleContext) {
   const datasources = await context.resolve()
 
-  return stripIndent(/*js*/ `
+  return stripIndent(/* js */ `
     const helpers = {};
     ${
       datasources.map(({ name, dialect, imports: { helpers } }, index) => {
         if (['postgresql', 'mysql', 'sqlite'].includes(dialect)) {
-          return stripIndent(/*js*/`
+          return stripIndent(/* js */`
             import * as helpers_${index} from '${helpers}/${dialect}';
             helpers['${name}'] = helpers_${index};
           `)
