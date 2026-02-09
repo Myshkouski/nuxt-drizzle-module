@@ -12,7 +12,7 @@ export default defineNitroPlugin(async (nitroApp) => {
   if (Object.keys(datasources).length) {
     await nitroApp.hooks.callHook('drizzle:created', datasources)
   }
-  nitroApp.hooks.hook('request', async (event) => {
+  nitroApp.hooks.hook('request', event => {
     event.context.drizzle = datasources
   })
 })
