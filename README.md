@@ -22,7 +22,7 @@ Open the playground in Stackblitz to try Nuxt Drizzle without any local setup.
 - 📦 **Conditional imports** - Avoid bundling unused database drivers
 - 🔧 **Seamless Nuxt integration** - Auto-discovers Drizzle configs in subdirectories
 - 🛠️ **Migration support** - Built-in migration handling with hooks
-- ✅ **Multi-database support** - SQLite, PostgreSQL, MySQL, and Pglite
+- ✅ **Multi-database support** - SQLite, PostgreSQL, MySQL, Pglite and Cloudflare D1 (via binding or HTTP API)
 - 🪝 **Nitro hooks** - Lifecycle hooks for migrations and seeding
 
 ## Quick Setup
