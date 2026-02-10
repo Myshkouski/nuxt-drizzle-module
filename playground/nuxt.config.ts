@@ -22,16 +22,6 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: 'latest',
-  drizzle: {
-    datasource: {
-      content: {
-        connector: 'pglite',
-      },
-      users: {
-        connector: 'pglite',
-      },
-    },
-  },
   nitro: {
     // preset: 'cloudflare-module',
     cloudflare: {
@@ -44,6 +34,16 @@ export default defineNuxtConfig({
             database_id: process.env.NUXT_DRIZZLE_CONTENT_DATABASE_ID || process.env.NITRO_CLOUDFLARE_D1_CONTENT_DATABASE_ID,
           },
         ],
+      },
+    },
+  },
+  drizzle: {
+    datasource: {
+      content: {
+        connector: 'pglite',
+      },
+      users: {
+        connector: 'pglite',
       },
     },
   },

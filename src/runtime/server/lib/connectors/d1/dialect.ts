@@ -1,8 +1,8 @@
-import { sql, type SQL } from 'drizzle-orm';
-import type { SQLiteD1Session } from 'drizzle-orm/d1';
-import type { MigrationMeta, MigrationConfig } from 'drizzle-orm/migrator';
-import { SQLiteAsyncDialect } from 'drizzle-orm/sqlite-core';
-import { createBatchItem } from '../d1';
+import { sql, type SQL } from 'drizzle-orm'
+import type { SQLiteD1Session } from 'drizzle-orm/d1'
+import type { MigrationMeta, MigrationConfig } from 'drizzle-orm/migrator'
+import { SQLiteAsyncDialect } from 'drizzle-orm/sqlite-core'
+import { createBatchItem } from '../d1'
 
 /**
  * Dialect for Cloudflare D1 with batching instead of transaction for migrations.
@@ -10,37 +10,37 @@ import { createBatchItem } from '../d1';
  */
 export class SQLiteD1Dialect extends SQLiteAsyncDialect {
   override async migrate(migrations: Iterable<MigrationMeta>, session: SQLiteD1Session<any, any>, config?: MigrationConfig): Promise<void> {
-    const migrationsTable = config?.migrationsTable || "__drizzle_migrations";
+    const migrationsTable = config?.migrationsTable || '__drizzle_migrations'
     const migrationTableCreate = sql`
       CREATE TABLE IF NOT EXISTS ${sql.identifier(migrationsTable)} (
         id SERIAL PRIMARY KEY,
         hash text NOT NULL,
         created_at numeric
       )
-    `;
-    await session.run(migrationTableCreate);
+    `
+    await session.run(migrationTableCreate)
     const dbMigrations = await session.values(
-      sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`
-    );
-    const lastDbMigration = dbMigrations[0] ?? void 0;
+      sql`SELECT id, hash, created_at FROM ${sql.identifier(migrationsTable)} ORDER BY created_at DESC LIMIT 1`,
+    )
+    const lastDbMigration = dbMigrations[0] ?? void 0
 
-    const statementsToBatch: SQL[] = [];
+    const statementsToBatch: SQL[] = []
     for (const migration of migrations) {
       if (!lastDbMigration || Number(lastDbMigration[2]) < migration.folderMillis) {
         for (const stmt of migration.sql) {
-          statementsToBatch.push(sql.raw(stmt));
+          statementsToBatch.push(sql.raw(stmt))
         }
         statementsToBatch.push(
-          sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${sql.raw(`'${migration.hash}'`)}, ${sql.raw(`${migration.folderMillis}`)})`
-        );
+          sql`INSERT INTO ${sql.identifier(migrationsTable)} ("hash", "created_at") VALUES(${sql.raw(`'${migration.hash}'`)}, ${sql.raw(`${migration.folderMillis}`)})`,
+        )
       }
     }
     if (statementsToBatch.length > 0) {
       await session.batch(
-        statementsToBatch.map(sql => {
-          return createBatchItem({ session, dialect: this, sql });
-        })
-      );
+        statementsToBatch.map((sql) => {
+          return createBatchItem({ session, dialect: this, sql })
+        }),
+      )
     }
   }
 }
