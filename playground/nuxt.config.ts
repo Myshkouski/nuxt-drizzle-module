@@ -32,4 +32,19 @@ export default defineNuxtConfig({
       },
     },
   },
+  nitro: {
+    // preset: 'cloudflare-module',
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: true,
+      wrangler: {
+        d1_databases: [
+          {
+            binding: process.env.NUXT_DRIZZLE_CONTENT_BINDING || process.env.NITRO_CLOUDFLARE_D1_CONTENT_BINDING,
+            database_id: process.env.NUXT_DRIZZLE_CONTENT_DATABASE_ID || process.env.NITRO_CLOUDFLARE_D1_CONTENT_DATABASE_ID,
+          },
+        ],
+      },
+    },
+  },
 })
