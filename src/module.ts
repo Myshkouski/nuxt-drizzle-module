@@ -1,18 +1,10 @@
 import { defineNuxtModule, createResolver, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates, addServerImportsDir } from '@nuxt/kit'
-import type { HookResult } from 'nuxt/schema'
 import { createModuleContext, createStubModuleContext, type DatasourceInfo, type ModuleContext } from '@nuxt-drizzle/utils/context'
 import { runParallel } from './utils/async'
 import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
 import * as datasourceTemplates from './templates/datasource'
 import * as helpersTemplates from './templates/helpers'
-import * as runtimeConfigTemplates from './templates/runtime-config'
-
-declare module '@nuxt/schema' {
-  interface NuxtHooks {
-    'nuxt-drizzle:datasources': (datasources: DatasourceInfo[]) => HookResult
-  }
-}
 
 export interface ModuleOptions {
   /**
@@ -119,12 +111,6 @@ export default defineNuxtModule<ModuleOptions>().with({
       nitro: true,
       nuxt: false,
       shared: false,
-    })
-
-    nuxt.hook('prepare:types', ({ nodeReferences }) => {
-      nodeReferences.push({
-        types: runtimeConfigTemplates.typeDeclarations(),
-      })
     })
 
     // nuxt.options.watch = [nuxt.options.watch].flat().filter(watch => {
