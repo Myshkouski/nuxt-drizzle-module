@@ -44,3 +44,9 @@ declare module 'nitropack/types' {
     'drizzle:init:after': (datasources: DrizzleDatasources) => HookResult
   }
 }
+
+declare module 'h3' {
+  interface H3EventContext {
+    drizzle: DrizzleDatasources
+  }
+}

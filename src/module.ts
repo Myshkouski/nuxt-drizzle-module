@@ -6,16 +6,6 @@ import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/c
 import * as datasourceTemplates from './templates/datasource'
 import * as helpersTemplates from './templates/helpers'
 
-declare module '@nuxt/schema' {
-  interface RuntimeConfig {
-    drizzle?: Record<string, any> & {
-      [TName in DrizzleDatasourceName]?: NamedDrizzleDatasourceFactory<TName>['createDb'] extends (...args: [infer TConfig, ...any]) => any
-        ? TConfig
-        : unknown;
-    }
-  }
-}
-
 export interface ModuleOptions {
   /**
    * Directory to search datasources
