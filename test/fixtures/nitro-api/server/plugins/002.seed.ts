@@ -3,7 +3,7 @@ import { colorize } from 'consola/utils'
 import type { NamedDrizzleDatasource } from '#nuxt-drizzle/virtual/datasources'
 
 export default defineNitroPlugin((nitro) => {
-  nitro.hooks.hookOnce('drizzle:migrated', async (datasources) => {
+  nitro.hooks.hookOnce('drizzle:migrate:after', async (datasources) => {
     consola.info('Seed started:', colorize('greenBright', 'users'))
     await seedUsers(datasources.users)
     consola.info('Seed completed:', colorize('greenBright', 'users'))

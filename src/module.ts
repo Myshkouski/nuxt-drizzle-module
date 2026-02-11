@@ -63,7 +63,7 @@ export default defineNuxtModule<ModuleOptions>().with({
 
     addServerImportsDir(resolver.resolve('./runtime/server/utils/migrations'))
 
-    const runtimeServerPluginFilename = resolver.resolve('./runtime/server/plugins/event-context')
+    const runtimeServerPluginFilename = resolver.resolve('./runtime/server/plugins/init')
     addServerPlugin(runtimeServerPluginFilename)
 
     const baseDir = await resolver.resolvePath(moduleOptions.baseDir, { type: 'dir' })

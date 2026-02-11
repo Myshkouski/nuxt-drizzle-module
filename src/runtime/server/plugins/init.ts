@@ -6,15 +6,20 @@ import {
 } from '#nuxt-drizzle/virtual/datasources'
 import type { DrizzleDatasources, NamedDrizzleDatasource } from '../utils/types'
 
-export default defineNitroPlugin(async (nitroApp) => {
-  const runtimeConfig = useRuntimeConfig()
-  const datasources = await createDatasources(runtimeConfig.drizzle || {})
-  nitroApp.hooks.hook('request', (event) => {
+export default defineNitroPlugin(async (nitro) => {
+  let datasources: DrizzleDatasources
+  nitro.hooks.hookOnce('drizzle:init', async (event) => {
+    const runtimeConfig = useRuntimeConfig(event)
+    datasources = await createDatasources(runtimeConfig.drizzle || {})
+    await nitro.hooks.callHook('drizzle:init:after', datasources)
+  })
+
+  nitro.hooks.hook('request', async (event) => {
+    await nitro.hooks.callHook('drizzle:init', event)
     event.context.drizzle = datasources
   })
-  if (Object.keys(datasources).length) {
-    await nitroApp.hooks.callHook('drizzle:created', datasources)
-  }
+
+  await nitro.hooks.callHook('drizzle:init')
 })
 
 async function createDatasources<
