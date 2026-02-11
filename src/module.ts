@@ -5,14 +5,15 @@ import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
 import * as datasourceTemplates from './templates/datasource'
 import * as helpersTemplates from './templates/helpers'
+import type { DrizzleDatasourceName, NamedDrizzleDatasourceFactory } from '#nuxt-drizzle/virtual/datasources'
 
 declare module '@nuxt/schema' {
   interface RuntimeConfig {
     drizzle?: Record<string, any> & {
       [TName in DrizzleDatasourceName]?: NamedDrizzleDatasourceFactory<TName>['createDb'] extends (...args: [infer TConfig, ...any]) => any
-      ? TConfig
-      : unknown;
-    };
+        ? TConfig
+        : unknown;
+    }
   }
 }
 
