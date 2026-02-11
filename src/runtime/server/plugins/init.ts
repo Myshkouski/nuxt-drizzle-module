@@ -5,6 +5,8 @@ import {
   type DrizzleDatasourceName,
 } from '#nuxt-drizzle/virtual/datasources'
 import type { DrizzleDatasources, NamedDrizzleDatasource } from '../utils/types'
+import type { H3Event } from 'h3'
+import type { HookResult } from 'nuxt/schema'
 
 export default defineNitroPlugin(async (nitro) => {
   let datasources: DrizzleDatasources
@@ -34,4 +36,11 @@ async function createDatasources<
   }
 
   return datasources
+}
+
+declare module 'nitropack/types' {
+  interface NitroRuntimeHooks {
+    'drizzle:init': (event?: H3Event) => HookResult
+    'drizzle:init:after': (datasources: DrizzleDatasources) => HookResult
+  }
 }
