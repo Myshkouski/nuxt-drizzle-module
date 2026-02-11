@@ -111,6 +111,10 @@ export default defineNuxtModule<ModuleOptions>().with({
       shared: false,
     })
 
+    nuxt.hook('nitro:prepare:types', (options) => {
+      options.references.push({ path: resolver.resolve('./runtime/server/augments.d.ts') })
+    })
+
     nuxt.hook('builder:watch', async (event, path) => {
       if (path.startsWith(baseDir)) {
         await context.resolve(true)
