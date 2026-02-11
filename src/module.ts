@@ -123,10 +123,6 @@ export default defineNuxtModule<ModuleOptions>().with({
       shared: false,
     })
 
-    // nuxt.options.watch = [nuxt.options.watch].flat().filter(watch => {
-    //   return './server/drizzle/**' !== watch
-    // }).concat(["./server/drizzle/**"])
-
     nuxt.hook('builder:watch', async (event, path) => {
       if (path.startsWith(baseDir)) {
         await context.resolve(true)
