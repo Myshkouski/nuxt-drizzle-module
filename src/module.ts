@@ -31,7 +31,7 @@ export interface ModuleOptions {
   datasource?: DatasourceOptions
 
   /**
-   * Enable migrations composable and storage
+   * Enable migrations storage
    */
   migrations: boolean
 }
@@ -61,9 +61,7 @@ export default defineNuxtModule<ModuleOptions>().with({
     const runtimeServerUtilsDir = resolver.resolve('./runtime/server/utils/db')
     addServerImportsDir(runtimeServerUtilsDir)
 
-    if (true == moduleOptions.migrations) {
-      addServerImportsDir(resolver.resolve('./runtime/server/utils/migrations'))
-    }
+    addServerImportsDir(resolver.resolve('./runtime/server/utils/migrations'))
 
     const runtimeServerPluginFilename = resolver.resolve('./runtime/server/plugins/event-context')
     addServerPlugin(runtimeServerPluginFilename)
