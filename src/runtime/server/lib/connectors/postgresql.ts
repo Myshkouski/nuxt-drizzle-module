@@ -1,7 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import createPostgres, { type Options as PostgresOptions } from 'postgres'
 import { defineDrizzle } from '../../utils/db/defineDrizzle'
-import type { PrimitiveProps } from './types'
 
 export default defineDrizzle(<
   TSchema extends Record<string, any>,
@@ -13,6 +12,6 @@ export default defineDrizzle(<
   return drizzle(client, { schema })
 })
 
-type Options = PrimitiveProps<PostgresOptions<Record<string, createPostgres.PostgresType>>> & {
+type Options = PostgresOptions<Record<string, createPostgres.PostgresType>> & {
   url?: string
 }
