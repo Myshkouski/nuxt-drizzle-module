@@ -1,3 +1,5 @@
+import type { H3Event } from 'h3'
+import type { HookResult } from 'nuxt/schema'
 import type { DrizzleDatasources, NamedDrizzleDatasource } from './utils/types'
 import type { DrizzleDatasourceName, NamedDrizzleDatasourceFactory } from '#nuxt-drizzle/virtual/datasources'
 import type { PrimitiveProps } from './lib/connectors/types'
