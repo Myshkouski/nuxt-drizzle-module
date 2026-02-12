@@ -9,7 +9,7 @@ import type { NamedDrizzleDatasource } from '../types'
 export async function createDrizzle<
   TName extends DrizzleDatasourceName,
   TConfig,
->(name: TName, config: TConfig) {
+>(name: TName, config: TConfig): Promise<NamedDrizzleDatasource<TName>> {
   try {
     const { createDb, schema } = datasourceFactories[name]! satisfies NamedDrizzleDatasourceFactory<TName>
     const datasource: NamedDrizzleDatasource<TName> = {

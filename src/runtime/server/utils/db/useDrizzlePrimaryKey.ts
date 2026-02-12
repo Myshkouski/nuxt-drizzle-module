@@ -6,7 +6,7 @@ const ColumnsSymbol = Table.Symbol.Columns as symbol
 
 export function useDrizzlePrimaryKey<
   TTable extends Table,
->(table: TTable) {
+>(table: TTable): InferPrimaryColumns<TTable> {
   // @ts-expect-error Internal Drizzle API
   const columns = table[ColumnsSymbol] as typeof table._.columns
   return Object.fromEntries(
