@@ -1,12 +1,9 @@
 import cloudflareD1Connector from 'db0/connectors/cloudflare-d1'
 import { defineDrizzle } from '../../utils/db/defineDrizzle'
 import type { D1Database } from '@cloudflare/workers-types'
-import type { SQL, DrizzleConfig, RelationalSchemaConfig, TablesRelationalConfig } from 'drizzle-orm'
+import type { DrizzleConfig, RelationalSchemaConfig, TablesRelationalConfig } from 'drizzle-orm'
 import { DefaultLogger, extractTablesRelationalConfig, createTableRelationsHelpers } from 'drizzle-orm'
-import type { BatchItem } from 'drizzle-orm/batch'
 import { DrizzleD1Database, SQLiteD1Session, type AnyD1Database } from 'drizzle-orm/d1'
-import type { SQLiteAsyncDialect, type SQLiteSession } from 'drizzle-orm/sqlite-core'
-import { SQLiteRaw } from 'drizzle-orm/sqlite-core/query-builders/raw'
 import { SQLiteD1Dialect } from './d1/dialect'
 
 export default defineDrizzle(async <
@@ -66,20 +63,4 @@ function drizzle<
   }
 
   return db as any
-}
-
-export function createBatchItem<TResult>({ session, dialect, sql }: CreateBatchItemOptions): BatchItem<'sqlite'> {
-  return new SQLiteRaw<TResult>(
-    async () => await session.run(sql),
-    () => sql,
-    'run',
-    dialect,
-    result => result,
-  )
-}
-
-type CreateBatchItemOptions = {
-  session: SQLiteSession<'async', any, any, any>
-  dialect: SQLiteAsyncDialect
-  sql: SQL<unknown>
 }

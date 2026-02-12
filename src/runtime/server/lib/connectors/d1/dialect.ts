@@ -1,8 +1,9 @@
 import { sql, type SQL } from 'drizzle-orm'
+import type { BatchItem } from 'drizzle-orm/batch'
 import type { SQLiteD1Session } from 'drizzle-orm/d1'
 import type { MigrationMeta, MigrationConfig } from 'drizzle-orm/migrator'
-import { SQLiteAsyncDialect } from 'drizzle-orm/sqlite-core'
-import { createBatchItem } from '../d1'
+import { SQLiteAsyncDialect, type SQLiteSession } from 'drizzle-orm/sqlite-core'
+import { SQLiteRaw } from 'drizzle-orm/sqlite-core/query-builders/raw'
 
 /**
  * Dialect for Cloudflare D1 with batching instead of transaction for migrations.
@@ -43,4 +44,20 @@ export class SQLiteD1Dialect extends SQLiteAsyncDialect {
       )
     }
   }
+}
+
+function createBatchItem<TResult>({ session, dialect, sql }: CreateBatchItemOptions): BatchItem<'sqlite'> {
+  return new SQLiteRaw<TResult>(
+    async () => await session.run(sql),
+    () => sql,
+    'run',
+    dialect,
+    result => result,
+  )
+}
+
+type CreateBatchItemOptions = {
+  session: SQLiteSession<'async', any, any, any>
+  dialect: SQLiteAsyncDialect
+  sql: SQL<unknown>
 }
