@@ -3,6 +3,9 @@ import type { ServerAssetDir } from 'nitropack/types'
 import type { ConnectorName } from 'db0'
 import type { NuxtOptions } from '@nuxt/schema'
 import type { ModuleOptions } from '../module'
+import { VirtualModules } from './const'
+import * as datasourceTemplates from '../templates/datasource'
+import * as helpersTemplates from '../templates/helpers'
 
 /**
  * @see [function serverAssets(nitro: Nitro)](https://github.com/nitrojs/nitro/blob/ef01b092b5fa09d28acb5bd0668ae80505f7c6b4/src/build/virtual/server-assets.ts#L18)
@@ -52,4 +55,16 @@ export type DatasourceOptions = {
   [name: string & {}]: {
     connector: ConnectorName
   }
+}
+
+export type NitroVirtualModule = {
+  filename: string
+  getContents: () => Promise<string> | string
+}
+
+export function getNitroVirtualModules(context: ModuleContext): Iterable<NitroVirtualModule> {
+  return Object.entries({
+    [VirtualModules.DATASOURCE]: async () => await datasourceTemplates.runtime(context),
+    [VirtualModules.HELPERS]: async () => await helpersTemplates.runtime(context)
+  }).map(([filename, getContents]) => ({ filename, getContents }))
 }

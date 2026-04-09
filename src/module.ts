@@ -1,7 +1,7 @@
 import { defineNuxtModule, createResolver, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates, addServerImportsDir } from '@nuxt/kit'
 import { createModuleContext, createStubModuleContext, type ModuleContext } from '@nuxt-drizzle/utils/context'
 import { runParallel } from './utils/async'
-import { getDatasourceOptions, updateServerAssets, type DatasourceOptions } from './utils/nitro'
+import { getDatasourceOptions, getNitroVirtualModules, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
 import * as datasourceTemplates from './templates/datasource'
 import * as helpersTemplates from './templates/helpers'
@@ -73,12 +73,9 @@ export default defineNuxtModule<ModuleOptions>().with({
           datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource) || {},
         })
 
-    addServerTemplate({
-      filename: VirtualModules.DATASOURCE,
-      async getContents() {
-        return await datasourceTemplates.runtime(context)
-      },
-    })
+    for (const { filename, getContents } of getNitroVirtualModules(context)) {
+      addServerTemplate({ filename, getContents })
+    }
 
     addTypeTemplate({
       filename: VirtualModules.DATASOURCE_TYPES,
@@ -90,13 +87,6 @@ export default defineNuxtModule<ModuleOptions>().with({
       nitro: true,
       nuxt: false,
       shared: false,
-    })
-
-    addServerTemplate({
-      filename: VirtualModules.HELPERS,
-      async getContents() {
-        return await helpersTemplates.runtime(context)
-      },
     })
 
     addTypeTemplate({
