@@ -6,6 +6,7 @@ import type { ModuleOptions } from '../module'
 import { VirtualModules } from './const'
 import * as datasourceTemplates from '../templates/datasource'
 import * as helpersTemplates from '../templates/helpers'
+import type { NuxtTypeTemplate, TSReference } from 'nuxt/schema'
 
 /**
  * @see [function serverAssets(nitro: Nitro)](https://github.com/nitrojs/nitro/blob/ef01b092b5fa09d28acb5bd0668ae80505f7c6b4/src/build/virtual/server-assets.ts#L18)
@@ -57,14 +58,32 @@ export type DatasourceOptions = {
   }
 }
 
-export type NitroVirtualModule = {
-  filename: string
+export type NitroVirtualModule<TFilename extends string = string> = {
+  filename: TFilename
   getContents: () => Promise<string> | string
 }
 
 export function getNitroVirtualModules(context: ModuleContext): Iterable<NitroVirtualModule> {
-  return Object.entries({
+  return toVirtualModules({
     [VirtualModules.DATASOURCE]: async () => await datasourceTemplates.runtime(context),
     [VirtualModules.HELPERS]: async () => await helpersTemplates.runtime(context)
-  }).map(([filename, getContents]) => ({ filename, getContents }))
+  })
+}
+
+export function getNitroTypeDeclarations(context: ModuleContext): Iterable<NitroVirtualModule<`${string}.d.ts`>> {
+  return toVirtualModules({
+    [VirtualModules.DATASOURCE_TYPES]: async () => await datasourceTemplates.typeDeclarations(context),
+    [VirtualModules.HELPERS_TYPES]: async () => await helpersTemplates.typeDeclarations(context),
+  } as const)
+}
+
+export function getNitroTypeReferences(resolve: (path: string) => string): Iterable<TSReference> {
+  return [
+    { path: resolve('./runtime/server/augments.d.ts') }
+  ]
+}
+
+function toVirtualModules<TKey extends string = string, TValue extends NitroVirtualModule['getContents'] = NitroVirtualModule['getContents']>(records: Record<TKey, TValue>): Iterable<NitroVirtualModule<TKey>> {
+  const entries = Object.entries(records) as [TKey, TValue][]
+  return entries.map(([filename, getContents]) => ({ filename, getContents }))
 }

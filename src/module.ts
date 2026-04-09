@@ -1,7 +1,7 @@
 import { defineNuxtModule, createResolver, addServerTemplate, addTypeTemplate, addServerPlugin, useLogger, updateTemplates, addServerImportsDir } from '@nuxt/kit'
 import { createModuleContext, createStubModuleContext, type ModuleContext } from '@nuxt-drizzle/utils/context'
 import { runParallel } from './utils/async'
-import { getDatasourceOptions, getNitroVirtualModules, updateServerAssets, type DatasourceOptions } from './utils/nitro'
+import { getDatasourceOptions, getNitroTypeDeclarations, getNitroTypeReferences, getNitroVirtualModules, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
 import * as datasourceTemplates from './templates/datasource'
 import * as helpersTemplates from './templates/helpers'
@@ -77,32 +77,20 @@ export default defineNuxtModule<ModuleOptions>().with({
       addServerTemplate({ filename, getContents })
     }
 
-    addTypeTemplate({
-      filename: VirtualModules.DATASOURCE_TYPES,
-      async getContents() {
-        return await datasourceTemplates.typeDeclarations(context)
-      },
-    }, {
-      node: true,
-      nitro: true,
-      nuxt: false,
-      shared: false,
-    })
-
-    addTypeTemplate({
-      filename: VirtualModules.HELPERS_TYPES,
-      async getContents() {
-        return await helpersTemplates.typeDeclarations(context)
-      },
-    }, {
-      node: true,
-      nitro: true,
-      nuxt: false,
-      shared: false,
-    })
+    for (const { filename, getContents } of getNitroTypeDeclarations(context)) {
+      addTypeTemplate({
+        filename, getContents
+      }, {
+        node: true,
+        nitro: true,
+        nuxt: false,
+        shared: false,
+      })
+    }
 
     nuxt.hook('nitro:prepare:types', (options) => {
-      options.references.push({ path: resolver.resolve('./runtime/server/augments.d.ts') })
+      const references = getNitroTypeReferences(resolver.resolve.bind(resolver))
+      options.references.push(...references)
     })
 
     nuxt.hook('builder:watch', async (event, path) => {
