@@ -1,5 +1,5 @@
 import type { ModuleContext } from '@nuxt-drizzle/utils/context'
-import type { ServerAssetDir } from 'nitropack/types'
+import type { ServerAssetDir, NitroConfig } from 'nitropack/types'
 import type { ConnectorName } from 'db0'
 import type { NuxtOptions } from '@nuxt/schema'
 import type { ModuleOptions } from '../module'
@@ -10,15 +10,15 @@ import * as helpersTemplates from '../templates/helpers'
 /**
  * @see [function serverAssets(nitro: Nitro)](https://github.com/nitrojs/nitro/blob/ef01b092b5fa09d28acb5bd0668ae80505f7c6b4/src/build/virtual/server-assets.ts#L18)
  */
-export async function updateServerAssets(moduleOptions: ModuleOptions, context: ModuleContext, nuxtOptions: NuxtOptions) {
+export async function updateServerAssets(moduleOptions: ModuleOptions, context: ModuleContext, nitroOptions: NitroConfig) {
   if (moduleOptions.migrations) {
-    await updateMigrationAssets(context, nuxtOptions)
+    await updateMigrationAssets(context, nitroOptions)
   }
 }
 
 const MIGRATION_ASSETS_BASE = 'drizzle:migrations' as const
 
-async function updateMigrationAssets(context: ModuleContext, nuxtOptions: NuxtOptions) {
+async function updateMigrationAssets(context: ModuleContext, nitroOptions: NitroConfig) {
   const datasources = await context.resolve()
 
   const drizzleMigrationAssets: ServerAssetDir[] = datasources.map(({ name, imports }) => {
@@ -38,16 +38,16 @@ async function updateMigrationAssets(context: ModuleContext, nuxtOptions: NuxtOp
     }
   })
 
-  nuxtOptions.nitro.serverAssets = [nuxtOptions.nitro.serverAssets].flat().filter((serverAsset) => {
+  nitroOptions.serverAssets = [nitroOptions.serverAssets].flat().filter((serverAsset) => {
     return serverAsset?.baseName?.startsWith(MIGRATION_ASSETS_BASE)
   }).concat(drizzleMigrationAssets)
 }
 
-export function getDatasourceOptions(nuxtOptions: NuxtOptions, options: DatasourceOptions) {
-  return nuxtOptions.nitro.experimental?.database
-    ? nuxtOptions.nitro.dev
-      ? nuxtOptions.nitro.devDatabase
-      : nuxtOptions.nitro.database
+export function getDatasourceOptions(nitroOptions: NitroConfig, options: DatasourceOptions) {
+  return nitroOptions.experimental?.database
+    ? nitroOptions.dev
+      ? nitroOptions.devDatabase
+      : nitroOptions.database
     : options
 }
 

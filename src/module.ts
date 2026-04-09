@@ -70,7 +70,7 @@ export default defineNuxtModule<ModuleOptions>().with({
           logger,
           resolver,
           configPattern: moduleOptions.configPattern,
-          datasource: getDatasourceOptions(nuxt.options, moduleOptions.datasource) || {},
+          datasource: getDatasourceOptions(nuxt.options.nitro, moduleOptions.datasource) || {},
         })
 
     for (const { filename, getContents } of getNitroVirtualModules(context)) {
@@ -111,7 +111,7 @@ export default defineNuxtModule<ModuleOptions>().with({
         logger.info('Datasources updated.')
 
         await runParallel(
-          () => updateServerAssets(moduleOptions, context, nuxt.options),
+          () => updateServerAssets(moduleOptions, context, nuxt.options.nitro),
           () => updateTemplates({
             filter(template) {
               return template.filename.startsWith(VIRTUAL_MODULE_ID_PREFIX)
@@ -122,7 +122,7 @@ export default defineNuxtModule<ModuleOptions>().with({
     })
 
     nuxt.hook('modules:done', async () => {
-      await updateServerAssets(moduleOptions, context, nuxt.options)
+      await updateServerAssets(moduleOptions, context, nuxt.options.nitro)
     })
   },
 })
