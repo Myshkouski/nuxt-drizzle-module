@@ -1,12 +1,10 @@
 import type { ModuleContext } from '@nuxt-drizzle/utils/context'
 import type { ServerAssetDir, NitroConfig } from 'nitropack/types'
 import type { ConnectorName } from 'db0'
-import type { NuxtOptions } from '@nuxt/schema'
 import type { ModuleOptions } from '../module'
 import { VirtualModules } from './const'
 import * as datasourceTemplates from '../templates/datasource'
 import * as helpersTemplates from '../templates/helpers'
-import type { NuxtTypeTemplate, TSReference } from 'nuxt/schema'
 
 /**
  * @see [function serverAssets(nitro: Nitro)](https://github.com/nitrojs/nitro/blob/ef01b092b5fa09d28acb5bd0668ae80505f7c6b4/src/build/virtual/server-assets.ts#L18)
@@ -58,9 +56,11 @@ export type DatasourceOptions = {
   }
 }
 
+type GetContentsFn = () => Promise<string> | string
+
 export type NitroVirtualModule<TFilename extends string = string> = {
   filename: TFilename
-  getContents: () => Promise<string> | string
+  getContents: GetContentsFn
 }
 
 export function getNitroVirtualModules(context: ModuleContext): Iterable<NitroVirtualModule> {
@@ -77,13 +77,16 @@ export function getNitroTypeDeclarations(context: ModuleContext): Iterable<Nitro
   } as const)
 }
 
-export function getNitroTypeReferences(resolve: (path: string) => string): Iterable<TSReference> {
+export function getNitroTypeReferences(resolve: (path: string) => string): Iterable<{ path: string }> {
   return [
     { path: resolve('./runtime/server/augments.d.ts') }
   ]
 }
 
-function toVirtualModules<TKey extends string = string, TValue extends NitroVirtualModule['getContents'] = NitroVirtualModule['getContents']>(records: Record<TKey, TValue>): Iterable<NitroVirtualModule<TKey>> {
+function toVirtualModules<
+  TKey extends string = string,
+  TValue extends GetContentsFn = GetContentsFn
+>(records: Record<TKey, TValue>): Iterable<NitroVirtualModule<TKey>> {
   const entries = Object.entries(records) as [TKey, TValue][]
   return entries.map(([filename, getContents]) => ({ filename, getContents }))
 }

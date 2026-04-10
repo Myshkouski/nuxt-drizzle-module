@@ -89,7 +89,7 @@ export default defineNuxtModule<ModuleOptions>().with({
     }
 
     nuxt.hook('nitro:prepare:types', (options) => {
-      const references = getNitroTypeReferences(resolver.resolve.bind(resolver))
+      const references = getNitroTypeReferences(path => resolver.resolve(path))
       options.references.push(...references)
     })
 
