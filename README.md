@@ -12,7 +12,7 @@ Nuxt module for automating Drizzle ORM setup with support for multiple datasourc
 
 ## Try it Online
 
-[![Open in Stackblitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/Myshkouski/nuxt-drizzle)
+[![Open in Stackblitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/Myshkouski/nuxt-drizzle-module)
 
 Open the playground in Stackblitz to try Nuxt Drizzle without any local setup.
 
