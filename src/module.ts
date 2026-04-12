@@ -3,8 +3,6 @@ import { createModuleContext, createStubModuleContext, type ModuleContext } from
 import { runParallel } from './utils/async'
 import { getDatasourceOptions, getNitroTypeDeclarations, getNitroTypeReferences, getNitroVirtualModules, updateServerAssets, type DatasourceOptions } from './utils/nitro'
 import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
-import * as datasourceTemplates from './templates/datasource'
-import * as helpersTemplates from './templates/helpers'
 
 export interface ModuleOptions {
   /**
