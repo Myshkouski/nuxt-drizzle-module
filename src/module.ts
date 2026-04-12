@@ -2,7 +2,7 @@ import { defineNuxtModule, createResolver, addServerTemplate, addTypeTemplate, a
 import { createModuleContext, createStubModuleContext, type ModuleContext } from '@nuxt-drizzle/utils/context'
 import { runParallel } from './utils/async'
 import { getDatasourceOptions, getNitroTypeDeclarations, getNitroTypeReferences, getNitroVirtualModules, updateServerAssets, type DatasourceOptions } from './utils/nitro'
-import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX, VirtualModules } from './utils/const'
+import { MODULE_NAME, VIRTUAL_MODULE_ID_PREFIX } from './utils/const'
 
 export interface ModuleOptions {
   /**
@@ -77,7 +77,7 @@ export default defineNuxtModule<ModuleOptions>().with({
 
     for (const { filename, getContents } of getNitroTypeDeclarations(context)) {
       addTypeTemplate({
-        filename, getContents
+        filename, getContents,
       }, {
         node: true,
         nitro: true,

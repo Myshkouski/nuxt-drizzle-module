@@ -66,7 +66,7 @@ export type NitroVirtualModule<TFilename extends string = string> = {
 export function getNitroVirtualModules(context: ModuleContext): Iterable<NitroVirtualModule> {
   return toVirtualModules({
     [VirtualModules.DATASOURCE]: async () => await datasourceTemplates.runtime(context),
-    [VirtualModules.HELPERS]: async () => await helpersTemplates.runtime(context)
+    [VirtualModules.HELPERS]: async () => await helpersTemplates.runtime(context),
   })
 }
 
@@ -79,13 +79,13 @@ export function getNitroTypeDeclarations(context: ModuleContext): Iterable<Nitro
 
 export function getNitroTypeReferences(resolve: (path: string) => string): Iterable<{ path: string }> {
   return [
-    { path: resolve('./runtime/server/augments.d.ts') }
+    { path: resolve('./runtime/server/augments.d.ts') },
   ]
 }
 
 function toVirtualModules<
   TKey extends string = string,
-  TValue extends GetContentsFn = GetContentsFn
+  TValue extends GetContentsFn = GetContentsFn,
 >(records: Record<TKey, TValue>): Iterable<NitroVirtualModule<TKey>> {
   const entries = Object.entries(records) as [TKey, TValue][]
   return entries.map(([filename, getContents]) => ({ filename, getContents }))

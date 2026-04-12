@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { setup, $fetch } from '@nuxt/test-utils/e2e'
 
 describe('drizzle datasources', {
-  timeout: 60 * 1000
+  timeout: 60 * 1000,
 }, async () => {
   await setup({
     rootDir: import.meta.dirname,
