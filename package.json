@@ -1,6 +1,6 @@
 {
   "name": "@nuxt-drizzle/module",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "description": "Nuxt module for automating Drizzle ORM setup with conditional database driver imports to prevent unused dependencies in the final bundle.",
   "repository": {
     "type": "git",
