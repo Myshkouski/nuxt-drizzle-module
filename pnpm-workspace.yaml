@@ -2,3 +2,9 @@ packages:
   - playground
   - test/e2e
   - test/fixtures/*
+
+catalog:
+  "@electric-sql/pglite": ^0.5.1
+  "better-sqlite3": "^12.9.0"
+  "mysql2": "^3.16.2"
+  "postgres": "^3.4.8"
