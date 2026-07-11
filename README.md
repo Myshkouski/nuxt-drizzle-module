@@ -1,6 +1,6 @@
 # Nuxt Drizzle
 
-> **⚠️ Under Heavy Development** - API may change until v1 release
+> **⚠️ Moved** - see [nuxt-drizzle](https://github.com/Myshkouski/nuxt-drizzle)
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
